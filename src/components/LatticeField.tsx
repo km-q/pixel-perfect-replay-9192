@@ -86,7 +86,7 @@ export function LatticeField() {
       ctx.lineWidth = 0.6;
       for (const [a, b] of edges) {
         const A = nodes[a], B = nodes[b];
-        const o = 0.1 + 0.07 * Math.sin(t * 2 + A.p);
+        const o = 0.22 + 0.1 * Math.sin(t * 2 + A.p);
         ctx.strokeStyle = `rgba(${fieldRgb},${o})`;
         ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
       }
@@ -95,13 +95,13 @@ export function LatticeField() {
       for (let i = 0; i < free.length; i++) for (let j = i + 1; j < free.length; j++) {
         const d = Math.hypot(free[i].x - free[j].x, free[i].y - free[j].y);
         if (d < 90) {
-          ctx.strokeStyle = `rgba(${fieldRgb},${0.07 * (1 - d / 90)})`;
+          ctx.strokeStyle = `rgba(${fieldRgb},${0.16 * (1 - d / 90)})`;
           ctx.beginPath(); ctx.moveTo(free[i].x, free[i].y); ctx.lineTo(free[j].x, free[j].y); ctx.stroke();
         }
       }
       for (const n of nodes) {
         const o = 0.25 + 0.25 * Math.sin(t * 3 + n.p);
-        ctx.fillStyle = n.gold ? `rgba(${goldRgb},${o + 0.3})` : `rgba(${fieldRgb},${o * 0.7})`;
+        ctx.fillStyle = n.gold ? `rgba(${goldRgb},${o + 0.3})` : `rgba(${fieldRgb},${Math.min(1, o * 1.6)})`;
         ctx.fillRect(n.x - 0.8, n.y - 0.8, n.gold ? 2.2 : 1.6, n.gold ? 2.2 : 1.6);
       }
       if (!reduce) raf = requestAnimationFrame(draw);
