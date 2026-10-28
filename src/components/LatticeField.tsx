@@ -85,7 +85,7 @@ export function LatticeField() {
       }
       ctx.lineWidth = 0.6;
       for (const [a, b] of edges) {
-        const A = nodes[a], B = nodes[b];
+        const A = nodes[a]!, B = nodes[b]!;
         const o = 0.22 + 0.1 * Math.sin(t * 2 + A.p);
         ctx.strokeStyle = `rgba(${fieldRgb},${o})`;
         ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
@@ -93,10 +93,10 @@ export function LatticeField() {
       // faint network links between nearby free particles
       const free = nodes.filter((n) => n.free);
       for (let i = 0; i < free.length; i++) for (let j = i + 1; j < free.length; j++) {
-        const d = Math.hypot(free[i].x - free[j].x, free[i].y - free[j].y);
+        const d = Math.hypot(free[i]!.x - free[j]!.x, free[i]!.y - free[j]!.y);
         if (d < 90) {
           ctx.strokeStyle = `rgba(${fieldRgb},${0.16 * (1 - d / 90)})`;
-          ctx.beginPath(); ctx.moveTo(free[i].x, free[i].y); ctx.lineTo(free[j].x, free[j].y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(free[i]!.x, free[i]!.y); ctx.lineTo(free[j]!.x, free[j]!.y); ctx.stroke();
         }
       }
       for (const n of nodes) {
