@@ -11,13 +11,15 @@ export function LatticeField() {
     const canvas = ref.current!;
     const ctx = canvas.getContext("2d")!;
     const styles = getComputedStyle(document.documentElement);
-    const probe = document.createElement("div");
-    probe.style.color = styles.getPropertyValue("--field");
-    document.body.appendChild(probe);
-    const fieldRgb = getComputedStyle(probe).color.match(/[\d.]+/g)!.slice(0, 3).join(",");
-    probe.style.color = styles.getPropertyValue("--accent");
-    const goldRgb = getComputedStyle(probe).color.match(/[\d.]+/g)!.slice(0, 3).join(",");
-    probe.remove();
+    const toRgb = (v: string) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = v.trim();
+      ctx.fillRect(0, 0, 1, 1);
+      const d = ctx.getImageData(0, 0, 1, 1).data;
+      return `${d[0]},${d[1]},${d[2]}`;
+    };
+    const fieldRgb = toRgb(styles.getPropertyValue("--field"));
+    const goldRgb = toRgb(styles.getPropertyValue("--accent"));
 
     type N = { hx: number; hy: number; x: number; y: number; p: number; gold: boolean; free: boolean; vx: number; vy: number };
     let nodes: N[] = [];
@@ -84,7 +86,7 @@ export function LatticeField() {
       ctx.lineWidth = 0.6;
       for (const [a, b] of edges) {
         const A = nodes[a], B = nodes[b];
-        const o = 0.05 + 0.05 * Math.sin(t * 2 + A.p);
+        const o = 0.1 + 0.07 * Math.sin(t * 2 + A.p);
         ctx.strokeStyle = `rgba(${fieldRgb},${o})`;
         ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
       }
